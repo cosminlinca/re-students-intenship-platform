@@ -1,0 +1,55 @@
+{
+  "fluentMethods": true,
+  "clientRootFolder": "",
+  "relationships": [
+    {
+      "relationshipName": "user",
+      "otherEntityName": "user",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "login",
+      "ownerSide": true,
+      "useJPADerivedIdentifier": false,
+      "otherEntityRelationshipName": "student"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "university",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "faculty",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "profile",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "yearOfStudy",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "cvPath",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "observations",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "cvDocument",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    }
+  ],
+  "changelogDate": "20201229100427",
+  "dto": "no",
+  "searchEngine": false,
+  "service": "serviceClass",
+  "entityTableName": "student",
+  "databaseType": "sql",
+  "readOnly": false,
+  "jpaMetamodelFiltering": false,
+  "pagination": "pagination"
+}

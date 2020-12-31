@@ -1,9 +1,11 @@
 package com.re.internship.platform.web.rest;
 
+import com.re.internship.platform.domain.Student;
 import com.re.internship.platform.domain.User;
 import com.re.internship.platform.repository.UserRepository;
 import com.re.internship.platform.security.SecurityUtils;
 import com.re.internship.platform.service.MailService;
+import com.re.internship.platform.service.StudentService;
 import com.re.internship.platform.service.UserService;
 import com.re.internship.platform.service.dto.PasswordChangeDTO;
 import com.re.internship.platform.service.dto.UserDTO;
@@ -39,12 +41,16 @@ public class AccountResource {
 
     private final UserService userService;
 
+    private final StudentService studentService;
+
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService,
+                           StudentService studentService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.studentService = studentService;
     }
 
     /**
@@ -61,7 +67,16 @@ public class AccountResource {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
+
+        // Create user
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+        Student student = new Student(managedUserVM.getUniversity(), managedUserVM.getFaculty(), managedUserVM.getProfile(),
+            managedUserVM.getYearOfStudy(), managedUserVM.getCvPath(), managedUserVM.getObservations(), managedUserVM.getCvDocument(),
+            managedUserVM.getCvDocumentContentType(), user);
+
+        // Create student based on created user account
+        this.studentService.save(student);
+
         mailService.sendActivationEmail(user);
     }
 

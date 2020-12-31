@@ -1,0 +1,89 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-student-heading" jhiTranslate="studentsIntenshipPlatformAvraApp.student.home.createOrEditLabel">Create or edit a Student</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.student.university" for="field_university">University</label>
+                    <input type="text" class="form-control" name="university" id="field_university"
+                           formControlName="university"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.student.faculty" for="field_faculty">Faculty</label>
+                    <input type="text" class="form-control" name="faculty" id="field_faculty"
+                           formControlName="faculty"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.student.profile" for="field_profile">Profile</label>
+                    <input type="text" class="form-control" name="profile" id="field_profile"
+                           formControlName="profile"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.student.yearOfStudy" for="field_yearOfStudy">Year Of Study</label>
+                    <input type="number" class="form-control" name="yearOfStudy" id="field_yearOfStudy"
+                           formControlName="yearOfStudy"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.student.cvPath" for="field_cvPath">Cv Path</label>
+                    <input type="text" class="form-control" name="cvPath" id="field_cvPath"
+                           formControlName="cvPath"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.student.observations" for="field_observations">Observations</label>
+                    <input type="text" class="form-control" name="observations" id="field_observations"
+                           formControlName="observations"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.student.cvDocument" for="field_cvDocument">Cv Document</label>
+                    <div>
+                        <div *ngIf="editForm.get('cvDocument')!.value" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(editForm.get('cvDocumentContentType')!.value, editForm.get('cvDocument')!.value)" jhiTranslate="entity.action.open">open</a><br>
+                            <span class="pull-left">{{ editForm.get('cvDocumentContentType')!.value }}, {{ byteSize(editForm.get('cvDocument')!.value) }}</span>
+                            <button type="button" (click)="editForm.patchValue({cvDocument: null});editForm.patchValue({cvDocumentContentType: null});"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon icon="times"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_cvDocument" (change)="setFileData($event, 'cvDocument', false)" jhiTranslate="entity.action.addblob"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="cvDocument" id="field_cvDocument"
+                           formControlName="cvDocument"/>
+                    <input type="hidden" class="form-control" name="cvDocumentContentType" id="field_cvDocumentContentType"
+                           formControlName="cvDocumentContentType" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.student.user" for="field_user">User</label>
+                    <select class="form-control" id="field_user" name="user" formControlName="user">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="userOption.id === editForm.get('user')!.value?.id ? editForm.get('user')!.value : userOption" *ngFor="let userOption of users; trackBy: trackById">{{ userOption.login }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

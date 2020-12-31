@@ -12,6 +12,15 @@ export interface IUser {
   lastModifiedBy?: string;
   lastModifiedDate?: Date;
   password?: string;
+
+  university?: string;
+  faculty?: string;
+  profile?: string;
+  yearOfStudy?: number;
+  cvPath?: string;
+  observations?: string;
+  cvDocumentContentType?: string;
+  cvDocument?: any;
 }
 
 export class User implements IUser {

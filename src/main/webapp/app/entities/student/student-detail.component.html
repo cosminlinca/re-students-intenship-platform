@@ -1,0 +1,61 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="student">
+            <h2><span jhiTranslate="studentsIntenshipPlatformAvraApp.student.detail.title">Student</span> {{ student.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.student.university">University</span></dt>
+                <dd>
+                    <span>{{ student.university }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.student.faculty">Faculty</span></dt>
+                <dd>
+                    <span>{{ student.faculty }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.student.profile">Profile</span></dt>
+                <dd>
+                    <span>{{ student.profile }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.student.yearOfStudy">Year Of Study</span></dt>
+                <dd>
+                    <span>{{ student.yearOfStudy }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.student.cvPath">Cv Path</span></dt>
+                <dd>
+                    <span>{{ student.cvPath }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.student.observations">Observations</span></dt>
+                <dd>
+                    <span>{{ student.observations }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.student.cvDocument">Cv Document</span></dt>
+                <dd>
+                    <div *ngIf="student.cvDocument">
+                        <a (click)="openFile(student.cvDocumentContentType, student.cvDocument)" jhiTranslate="entity.action.open">open</a>
+                        {{ student.cvDocumentContentType }}, {{ byteSize(student.cvDocument) }}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.student.user">User</span></dt>
+                <dd>
+                    {{ student.user?.login }}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/student', student.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
