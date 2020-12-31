@@ -1,0 +1,74 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-offer-heading" jhiTranslate="studentsIntenshipPlatformAvraApp.offer.home.createOrEditLabel">Create or edit a Offer</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.offer.positionName" for="field_positionName">Position Name</label>
+                    <input type="text" class="form-control" name="positionName" id="field_positionName"
+                           formControlName="positionName"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.offer.programDurationInWeeks" for="field_programDurationInWeeks">Program Duration In Weeks</label>
+                    <input type="number" class="form-control" name="programDurationInWeeks" id="field_programDurationInWeeks"
+                           formControlName="programDurationInWeeks"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.offer.requiredSkills" for="field_requiredSkills">Required Skills</label>
+                    <input type="text" class="form-control" name="requiredSkills" id="field_requiredSkills"
+                           formControlName="requiredSkills"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.offer.technologies" for="field_technologies">Technologies</label>
+                    <input type="text" class="form-control" name="technologies" id="field_technologies"
+                           formControlName="technologies"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.offer.details" for="field_details">Details</label>
+                    <input type="text" class="form-control" name="details" id="field_details"
+                           formControlName="details"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.offer.paid" for="field_paid">Paid</label>
+                    <input type="checkbox" class="form-control" name="paid" id="field_paid"
+                           formControlName="paid"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.offer.observations" for="field_observations">Observations</label>
+                    <input type="text" class="form-control" name="observations" id="field_observations"
+                           formControlName="observations"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.offer.domain" for="field_domain">Domain</label>
+                    <input type="text" class="form-control" name="domain" id="field_domain"
+                           formControlName="domain"/>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

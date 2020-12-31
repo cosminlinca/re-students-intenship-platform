@@ -1,23 +1,45 @@
 <div class="row">
-    <div class="col-md-3">
-        <span class="hipster img-fluid rounded"></span>
+    <div *ngIf="!isAuthenticated()" class="col-md-3">
+        <span class="mainLogo img-fluid rounded"></span>
     </div>
 
     <div class="col-md-9">
-        <h1 class="display-4">Welcome to our Student's Internship Platform!</h1>
-<!--        <h3>Team AVRA</h3>-->
+        <h1 class="display-4">Welcome to Student's Internship Platform!</h1>
 
-        <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p>
 
         <div [ngSwitch]="isAuthenticated()">
-            <div class="alert alert-success" *ngSwitchCase="true">
-                <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message"
-                    [translateValues]="{ username: account.login }">You are logged in as user "{{ account.login }}".</span>
+            <div *ngSwitchCase="true">
+                <p class="lead" jhiTranslate="home.subtitle">Internship Programs</p>
+
+                <div *ngIf="isAdmin(); then adminList else userList"></div>
+
+                <ng-template #adminList>
+                    <div *ngFor="let offer of offers">
+                        <p>{{offer.positionName}}</p>
+<!--                        <mat-card class="mat-elevation-z4">-->
+<!--                            <mat-card-header>-->
+<!--                                <mat-card-title>{{offer.positionName}}</mat-card-title>-->
+<!--                            </mat-card-header>-->
+<!--                            <mat-card-content>-->
+<!--                                <p>{{offer.details}}</p>-->
+<!--                            </mat-card-content>-->
+<!--                            <mat-card-actions>-->
+<!--                                <button mat-button>LIKE</button> <button mat-button>DETAILS</button>-->
+<!--                            </mat-card-actions>-->
+<!--                        </mat-card>-->
+                    </div>
+                </ng-template>
+
+                <ng-template #userList>
+                    <div *ngFor="let offer of offers">
+                        <p>{{offer.positionName}}</p>
+                    </div>
+                </ng-template>
             </div>
 
             <div class="alert alert-warning" *ngSwitchCase="false">
                 <span jhiTranslate="global.messages.info.authenticated.prefix">If you want to </span>
-                <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">sign in</a><b>, you can try to login as <b>student</b>, using your personal account account, or as <b>company</b>, using company's account!</span>
+                <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">sign in</a><span>, you can try to login as <b>student</b>, using your personal account account, or as <b>company</b>, using company's account!</span>
             </div>
 
             <div class="alert alert-warning" *ngSwitchCase="false">

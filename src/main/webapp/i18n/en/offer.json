@@ -1,0 +1,29 @@
+{
+  "studentsIntenshipPlatformAvraApp": {
+    "offer": {
+      "home": {
+        "title": "Offers",
+        "createLabel": "Create a new Offer",
+        "createOrEditLabel": "Create or edit a Offer",
+        "notFound": "No Offers found"
+      },
+      "created": "A new Offer is created with identifier {{ param }}",
+      "updated": "A Offer is updated with identifier {{ param }}",
+      "deleted": "A Offer is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Offer {{ id }}?"
+      },
+      "detail": {
+        "title": "Offer"
+      },
+      "positionName": "Position Name",
+      "programDurationInWeeks": "Program Duration In Weeks",
+      "requiredSkills": "Required Skills",
+      "technologies": "Technologies",
+      "details": "Details",
+      "paid": "Paid",
+      "observations": "Observations",
+      "domain": "Domain"
+    }
+  }
+}

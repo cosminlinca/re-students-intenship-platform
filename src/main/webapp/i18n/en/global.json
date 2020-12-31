@@ -9,6 +9,7 @@
         "main": "Entities",
         "testEntity": "Test Entity",
         "student": "Student",
+        "offer": "Offer",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

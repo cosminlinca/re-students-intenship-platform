@@ -1,0 +1,58 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="offer">
+            <h2><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.detail.title">Offer</span> {{ offer.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.positionName">Position Name</span></dt>
+                <dd>
+                    <span>{{ offer.positionName }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.programDurationInWeeks">Program Duration In Weeks</span></dt>
+                <dd>
+                    <span>{{ offer.programDurationInWeeks }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.requiredSkills">Required Skills</span></dt>
+                <dd>
+                    <span>{{ offer.requiredSkills }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.technologies">Technologies</span></dt>
+                <dd>
+                    <span>{{ offer.technologies }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.details">Details</span></dt>
+                <dd>
+                    <span>{{ offer.details }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.paid">Paid</span></dt>
+                <dd>
+                    <span>{{ offer.paid }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.observations">Observations</span></dt>
+                <dd>
+                    <span>{{ offer.observations }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.domain">Domain</span></dt>
+                <dd>
+                    <span>{{ offer.domain }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/offer', offer.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

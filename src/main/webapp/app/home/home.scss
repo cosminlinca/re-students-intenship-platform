@@ -10,6 +10,15 @@ Main page styles
   background-size: contain;
 }
 
+.mainLogo {
+  display: inline-block;
+  margin-top: 70px;
+  width: 400px;
+  height: 497px;
+  background: url('../../content/images/job.PNG') no-repeat center top;
+  background-size: contain;
+}
+
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
   only screen and (-moz-min-device-pixel-ratio: 2),

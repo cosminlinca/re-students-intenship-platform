@@ -1,0 +1,85 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.home.title">Offers</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-offer" [routerLink]="['/offer/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="studentsIntenshipPlatformAvraApp.offer.home.createLabel">
+            Create a new Offer
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="offers?.length === 0">
+        <span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.home.notFound">No offers found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="offers && offers.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+                    <th scope="col"  jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="positionName"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.positionName">Position Name</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="programDurationInWeeks"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.programDurationInWeeks">Program Duration In Weeks</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="requiredSkills"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.requiredSkills">Required Skills</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="technologies"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.technologies">Technologies</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="details"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.details">Details</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="paid"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.paid">Paid</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="observations"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.observations">Observations</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="domain"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.domain">Domain</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let offer of offers ;trackBy: trackId">
+                    <td><a [routerLink]="['/offer', offer.id, 'view']">{{ offer.id }}</a></td>
+                    <td>{{ offer.positionName }}</td>
+                    <td>{{ offer.programDurationInWeeks }}</td>
+                    <td>{{ offer.requiredSkills }}</td>
+                    <td>{{ offer.technologies }}</td>
+                    <td>{{ offer.details }}</td>
+                    <td>{{ offer.paid }}</td>
+                    <td>{{ offer.observations }}</td>
+                    <td>{{ offer.domain }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/offer', offer.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/offer', offer.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(offer)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="offers && offers.length > 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+        </div>
+    </div>
+</div>
