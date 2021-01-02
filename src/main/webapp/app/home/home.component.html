@@ -1,21 +1,19 @@
 <div class="row">
     <div *ngIf="!isAuthenticated()" class="col-md-3">
+        <h1 class="display-4">Welcome to Student's Internship Platform!</h1>
         <span class="mainLogo img-fluid rounded"></span>
     </div>
 
-    <div class="col-md-9">
-        <h1 class="display-4">Welcome to Student's Internship Platform!</h1>
-
-
+    <div class="content">
         <div [ngSwitch]="isAuthenticated()">
             <div *ngSwitchCase="true">
-                <p class="lead" jhiTranslate="home.subtitle">Internship Programs</p>
+<!--                <p class="lead" jhiTranslate="home.subtitle">Internship Programs</p>-->
 
                 <div *ngIf="isAdmin(); then adminList else userList"></div>
 
                 <ng-template #adminList>
-                    <div *ngFor="let offer of offers">
-                        <p>{{offer.positionName}}</p>
+<!--                    <div *ngFor="let offer of offers">-->
+<!--                        <p>{{offer.positionName}}</p>-->
 <!--                        <mat-card class="mat-elevation-z4">-->
 <!--                            <mat-card-header>-->
 <!--                                <mat-card-title>{{offer.positionName}}</mat-card-title>-->
@@ -27,14 +25,39 @@
 <!--                                <button mat-button>LIKE</button> <button mat-button>DETAILS</button>-->
 <!--                            </mat-card-actions>-->
 <!--                        </mat-card>-->
-                    </div>
+<!--                    </div>-->
                 </ng-template>
-
-                <ng-template #userList>
-                    <div *ngFor="let offer of offers">
-                        <p>{{offer.positionName}}</p>
-                    </div>
-                </ng-template>
+                    <ng-template #userList>
+<!--                        <mat-form-field>-->
+<!--                            <mat-label>Position</mat-label>-->
+<!--                            <input matInput placeholder="Position name" [(ngModel)] = _positionName>-->
+<!--                        </mat-form-field>-->
+                        <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                            <div fxFlex="20%" fxFlex.xs="100%" fxFlex.sm="33%" fxFlexAlign="stretch" *ngFor="let offer of offers">
+                                <mat-card>
+                                    <img mat-card-image src="https://ultima-ora.ro/wp-content/uploads/joboffer-678x381.jpg">
+                                    <mat-card-header>
+                                        <mat-card-title>{{offer.positionName}}</mat-card-title>
+                                    </mat-card-header>
+                                    <mat-card-actions>
+                                        <button mat-raised-button>DETAILS</button>
+                                        <button mat-raised-button>APPLY</button>
+                                    </mat-card-actions>
+                                    <mat-card-content>
+                                        <p>
+                                            <strong>TECHNOLOGIES:</strong>{{offer.technologies}}
+                                        </p>
+                                        <p>
+                                            <b>DURATION (weeks):</b> {{offer.programDurationInWeeks}}
+                                        </p>
+                                        <p>
+                                            <b>DETAILS:</b> {{offer.details}}
+                                        </p>
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+                        </div>
+                    </ng-template>
             </div>
 
             <div class="alert alert-warning" *ngSwitchCase="false">

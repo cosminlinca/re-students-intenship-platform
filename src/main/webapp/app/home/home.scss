@@ -10,6 +10,27 @@ Main page styles
   background-size: contain;
 }
 
+mat-toolbar {
+  justify-content: space-between;
+}
+
+.content {
+  padding: 16px;
+  margin: 32px;
+  //display: flex;
+  //align-items: center;
+  //justify-content: center;
+}
+mat-card-title {
+  max-height: 40px;
+}
+
+mat-card-content {
+  height: 230px;
+  max-height: 230px;
+  overflow-y: hidden;
+}
+
 .mainLogo {
   display: inline-block;
   margin-top: 70px;
