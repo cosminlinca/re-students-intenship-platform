@@ -17,6 +17,7 @@ import { FooterComponent } from './layouts/footer/footer.component';
 import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 import { ErrorComponent } from './layouts/error/error.component';
+import { OfferDetailsComponent } from './offer-details/offer-details.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -29,7 +30,15 @@ import { ErrorComponent } from './layouts/error/error.component';
     StudentsIntenshipPlatformAvraEntityModule,
     StudentsIntenshipPlatformAvraAppRoutingModule,
   ],
-  declarations: [MainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
+  declarations: [
+    MainComponent,
+    NavbarComponent,
+    ErrorComponent,
+    PageRibbonComponent,
+    ActiveMenuDirective,
+    FooterComponent,
+    OfferDetailsComponent,
+  ],
   bootstrap: [MainComponent],
 })
 export class StudentsIntenshipPlatformAvraAppModule {}
