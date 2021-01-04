@@ -4,6 +4,13 @@
         <span class="mainLogo img-fluid rounded"></span>
     </div>
 
+    <div *ngIf="isCompany()" style="flex-basis: 95%;">
+        <button id="create-offer" class="btn btn-primary float-right jh-create-entity create-offer addBtn" [routerLink]="['/offer/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.home.addLabel"> Add Offer </span>
+        </button>
+    </div>
+
     <div class="content">
         <div [ngSwitch]="isAuthenticated()">
             <div *ngSwitchCase="true">

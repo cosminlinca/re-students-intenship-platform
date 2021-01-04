@@ -1,0 +1,61 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="company">
+            <h2><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.detail.title">Company</span> {{ company.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.name">Name</span></dt>
+                <dd>
+                    <span>{{ company.name }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.description">Description</span></dt>
+                <dd>
+                    <span>{{ company.description }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.domainOfActivity">Domain Of Activity</span></dt>
+                <dd>
+                    <span>{{ company.domainOfActivity }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.technologies">Technologies</span></dt>
+                <dd>
+                    <span>{{ company.technologies }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.contact">Contact</span></dt>
+                <dd>
+                    <span>{{ company.contact }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.address">Address</span></dt>
+                <dd>
+                    <span>{{ company.address }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.observations">Observations</span></dt>
+                <dd>
+                    <span>{{ company.observations }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.presentation">Presentation</span></dt>
+                <dd>
+                    <div *ngIf="company.presentation">
+                        <a (click)="openFile(company.presentationContentType, company.presentation)" jhiTranslate="entity.action.open">open</a>
+                        {{ company.presentationContentType }}, {{ byteSize(company.presentation) }}
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/company', company.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

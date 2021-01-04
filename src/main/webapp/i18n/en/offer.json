@@ -5,7 +5,8 @@
         "title": "Offers",
         "createLabel": "Create a new Offer",
         "createOrEditLabel": "Create or edit a Offer",
-        "notFound": "No Offers found"
+        "notFound": "No Offers found",
+        "addLabel": "Add Offer"
       },
       "created": "A new Offer is created with identifier {{ param }}",
       "updated": "A Offer is updated with identifier {{ param }}",
