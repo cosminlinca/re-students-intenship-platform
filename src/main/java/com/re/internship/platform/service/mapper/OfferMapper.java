@@ -1,8 +1,9 @@
 package com.re.internship.platform.service.mapper;
 
+
 import com.re.internship.platform.domain.*;
 import com.re.internship.platform.service.dto.OfferDTO;
-import java.util.List;
+
 import org.mapstruct.*;
 
 /**
@@ -10,6 +11,9 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface OfferMapper extends EntityMapper<OfferDTO, Offer> {
+
+
+
     default Offer fromId(Long id) {
         if (id == null) {
             return null;

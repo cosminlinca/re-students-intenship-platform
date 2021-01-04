@@ -1,9 +1,8 @@
 package com.re.internship.platform.service.dto;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.re.internship.platform.web.rest.TestUtil;
 import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import com.re.internship.platform.web.rest.TestUtil;
 
 public class OfferDTOTest {
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { ActivatedRouteSnapshot, Resolve, Router, Routes } from '@angular/router';
-import { EMPTY, Observable, of } from 'rxjs';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
 import { Authority } from 'app/shared/constants/authority.constants';
@@ -11,7 +11,6 @@ import { OfferService } from './offer.service';
 import { OfferComponent } from './offer.component';
 import { OfferDetailComponent } from './offer-detail.component';
 import { OfferUpdateComponent } from './offer-update.component';
-import { OfferDetailsComponent } from '../../offer-details/offer-details.component';
 
 @Injectable({ providedIn: 'root' })
 export class OfferResolve implements Resolve<IOffer> {
@@ -53,7 +52,7 @@ export const offerRoute: Routes = [
       offer: OfferResolve,
     },
     data: {
-      authorities: [Authority.USER, Authority.STUDENT, Authority.COMPANY],
+      authorities: [Authority.USER],
       pageTitle: 'studentsIntenshipPlatformAvraApp.offer.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -77,19 +76,7 @@ export const offerRoute: Routes = [
       offer: OfferResolve,
     },
     data: {
-      authorities: [Authority.USER, Authority.COMPANY],
-      pageTitle: 'studentsIntenshipPlatformAvraApp.offer.home.title',
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: ':id/details',
-    component: OfferDetailsComponent,
-    resolve: {
-      offer: OfferResolve,
-    },
-    data: {
-      authorities: [Authority.USER, Authority.STUDENT],
+      authorities: [Authority.USER],
       pageTitle: 'studentsIntenshipPlatformAvraApp.offer.home.title',
     },
     canActivate: [UserRouteAccessService],

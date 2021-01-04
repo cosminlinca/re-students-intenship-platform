@@ -1,14 +1,9 @@
 package com.re.internship.platform.service;
 
-import com.re.internship.platform.domain.*; // for static metamodels
-import com.re.internship.platform.domain.Offer;
-import com.re.internship.platform.repository.OfferRepository;
-import com.re.internship.platform.service.dto.OfferCriteria;
-import com.re.internship.platform.service.dto.OfferDTO;
-import com.re.internship.platform.service.mapper.OfferMapper;
-import io.github.jhipster.service.QueryService;
 import java.util.List;
+
 import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,6 +11,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import io.github.jhipster.service.QueryService;
+
+import com.re.internship.platform.domain.Offer;
+import com.re.internship.platform.domain.*; // for static metamodels
+import com.re.internship.platform.repository.OfferRepository;
+import com.re.internship.platform.service.dto.OfferCriteria;
+import com.re.internship.platform.service.dto.OfferDTO;
+import com.re.internship.platform.service.mapper.OfferMapper;
 
 /**
  * Service for executing complex queries for {@link Offer} entities in the database.
@@ -26,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class OfferQueryService extends QueryService<Offer> {
+
     private final Logger log = LoggerFactory.getLogger(OfferQueryService.class);
 
     private final OfferRepository offerRepository;
@@ -59,7 +64,8 @@ public class OfferQueryService extends QueryService<Offer> {
     public Page<OfferDTO> findByCriteria(OfferCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Offer> specification = createSpecification(criteria);
-        return offerRepository.findAll(specification, page).map(offerMapper::toDto);
+        return offerRepository.findAll(specification, page)
+            .map(offerMapper::toDto);
     }
 
     /**
@@ -89,8 +95,7 @@ public class OfferQueryService extends QueryService<Offer> {
                 specification = specification.and(buildStringSpecification(criteria.getPositionName(), Offer_.positionName));
             }
             if (criteria.getProgramDurationInWeeks() != null) {
-                specification =
-                    specification.and(buildRangeSpecification(criteria.getProgramDurationInWeeks(), Offer_.programDurationInWeeks));
+                specification = specification.and(buildRangeSpecification(criteria.getProgramDurationInWeeks(), Offer_.programDurationInWeeks));
             }
             if (criteria.getRequiredSkills() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getRequiredSkills(), Offer_.requiredSkills));
@@ -109,6 +114,12 @@ public class OfferQueryService extends QueryService<Offer> {
             }
             if (criteria.getDomain() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDomain(), Offer_.domain));
+            }
+            if (criteria.getCompanyId() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getCompanyId(), Offer_.companyId));
+            }
+            if (criteria.getCoverImagePath() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCoverImagePath(), Offer_.coverImagePath));
             }
         }
         return specification;

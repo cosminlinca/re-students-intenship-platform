@@ -5,8 +5,7 @@
         "title": "Offers",
         "createLabel": "Create a new Offer",
         "createOrEditLabel": "Create or edit a Offer",
-        "notFound": "No Offers found",
-        "addLabel": "Add Offer"
+        "notFound": "No Offers found"
       },
       "created": "A new Offer is created with identifier {{ param }}",
       "updated": "A Offer is updated with identifier {{ param }}",
@@ -24,7 +23,9 @@
       "details": "Details",
       "paid": "Paid",
       "observations": "Observations",
-      "domain": "Domain"
+      "domain": "Domain",
+      "companyId": "Company Id",
+      "coverImagePath": "Cover Image Path"
     }
   }
 }

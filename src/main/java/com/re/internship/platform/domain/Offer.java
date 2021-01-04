@@ -1,7 +1,9 @@
 package com.re.internship.platform.domain;
 
-import java.io.Serializable;
+
 import javax.persistence.*;
+
+import java.io.Serializable;
 
 /**
  * A Offer.
@@ -9,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "offer")
 public class Offer implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -38,6 +41,12 @@ public class Offer implements Serializable {
 
     @Column(name = "domain")
     private String domain;
+
+    @Column(name = "company_id")
+    private Long companyId;
+
+    @Column(name = "cover_image_path")
+    private String coverImagePath;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -152,6 +161,31 @@ public class Offer implements Serializable {
         this.domain = domain;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public Offer companyId(Long companyId) {
+        this.companyId = companyId;
+        return this;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCoverImagePath() {
+        return coverImagePath;
+    }
+
+    public Offer coverImagePath(String coverImagePath) {
+        this.coverImagePath = coverImagePath;
+        return this;
+    }
+
+    public void setCoverImagePath(String coverImagePath) {
+        this.coverImagePath = coverImagePath;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -183,6 +217,8 @@ public class Offer implements Serializable {
             ", paid='" + isPaid() + "'" +
             ", observations='" + getObservations() + "'" +
             ", domain='" + getDomain() + "'" +
+            ", companyId=" + getCompanyId() +
+            ", coverImagePath='" + getCoverImagePath() + "'" +
             "}";
     }
 }

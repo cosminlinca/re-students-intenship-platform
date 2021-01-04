@@ -1,14 +1,9 @@
 package com.re.internship.platform.service;
 
-import com.re.internship.platform.domain.*; // for static metamodels
-import com.re.internship.platform.domain.Company;
-import com.re.internship.platform.repository.CompanyRepository;
-import com.re.internship.platform.service.dto.CompanyCriteria;
-import com.re.internship.platform.service.dto.CompanyDTO;
-import com.re.internship.platform.service.mapper.CompanyMapper;
-import io.github.jhipster.service.QueryService;
 import java.util.List;
+
 import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,6 +11,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import io.github.jhipster.service.QueryService;
+
+import com.re.internship.platform.domain.Company;
+import com.re.internship.platform.domain.*; // for static metamodels
+import com.re.internship.platform.repository.CompanyRepository;
+import com.re.internship.platform.service.dto.CompanyCriteria;
+import com.re.internship.platform.service.dto.CompanyDTO;
+import com.re.internship.platform.service.mapper.CompanyMapper;
 
 /**
  * Service for executing complex queries for {@link Company} entities in the database.
@@ -26,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class CompanyQueryService extends QueryService<Company> {
+
     private final Logger log = LoggerFactory.getLogger(CompanyQueryService.class);
 
     private final CompanyRepository companyRepository;
@@ -59,7 +64,8 @@ public class CompanyQueryService extends QueryService<Company> {
     public Page<CompanyDTO> findByCriteria(CompanyCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Company> specification = createSpecification(criteria);
-        return companyRepository.findAll(specification, page).map(companyMapper::toDto);
+        return companyRepository.findAll(specification, page)
+            .map(companyMapper::toDto);
     }
 
     /**
@@ -105,6 +111,10 @@ public class CompanyQueryService extends QueryService<Company> {
             }
             if (criteria.getObservations() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getObservations(), Company_.observations));
+            }
+            if (criteria.getUserId() != null) {
+                specification = specification.and(buildSpecification(criteria.getUserId(),
+                    root -> root.join(Company_.user, JoinType.LEFT).get(User_.id)));
             }
         }
         return specification;

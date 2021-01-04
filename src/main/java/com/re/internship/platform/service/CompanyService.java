@@ -4,13 +4,15 @@ import com.re.internship.platform.domain.Company;
 import com.re.internship.platform.repository.CompanyRepository;
 import com.re.internship.platform.service.dto.CompanyDTO;
 import com.re.internship.platform.service.mapper.CompanyMapper;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link Company}.
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class CompanyService {
+
     private final Logger log = LoggerFactory.getLogger(CompanyService.class);
 
     private final CompanyRepository companyRepository;
@@ -51,8 +54,10 @@ public class CompanyService {
     @Transactional(readOnly = true)
     public Page<CompanyDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Companies");
-        return companyRepository.findAll(pageable).map(companyMapper::toDto);
+        return companyRepository.findAll(pageable)
+            .map(companyMapper::toDto);
     }
+
 
     /**
      * Get one company by id.
@@ -63,7 +68,8 @@ public class CompanyService {
     @Transactional(readOnly = true)
     public Optional<CompanyDTO> findOne(Long id) {
         log.debug("Request to get Company : {}", id);
-        return companyRepository.findById(id).map(companyMapper::toDto);
+        return companyRepository.findById(id)
+            .map(companyMapper::toDto);
     }
 
     /**

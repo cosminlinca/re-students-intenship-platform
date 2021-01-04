@@ -1,5 +1,7 @@
 package com.re.internship.platform.service.dto;
 
+import java.io.Serializable;
+import java.util.Objects;
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
@@ -8,8 +10,6 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Criteria class for the {@link com.re.internship.platform.domain.Company} entity. This class is used
@@ -21,6 +21,7 @@ import java.util.Objects;
  * fix type specific filters.
  */
 public class CompanyCriteria implements Serializable, Criteria {
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -39,7 +40,10 @@ public class CompanyCriteria implements Serializable, Criteria {
 
     private StringFilter observations;
 
-    public CompanyCriteria() {}
+    private LongFilter userId;
+
+    public CompanyCriteria() {
+    }
 
     public CompanyCriteria(CompanyCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
@@ -50,6 +54,7 @@ public class CompanyCriteria implements Serializable, Criteria {
         this.contact = other.contact == null ? null : other.contact.copy();
         this.address = other.address == null ? null : other.address.copy();
         this.observations = other.observations == null ? null : other.observations.copy();
+        this.userId = other.userId == null ? null : other.userId.copy();
     }
 
     @Override
@@ -121,6 +126,15 @@ public class CompanyCriteria implements Serializable, Criteria {
         this.observations = observations;
     }
 
+    public LongFilter getUserId() {
+        return userId;
+    }
+
+    public void setUserId(LongFilter userId) {
+        this.userId = userId;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -130,7 +144,7 @@ public class CompanyCriteria implements Serializable, Criteria {
             return false;
         }
         final CompanyCriteria that = (CompanyCriteria) o;
-        return (
+        return
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
@@ -138,13 +152,23 @@ public class CompanyCriteria implements Serializable, Criteria {
             Objects.equals(technologies, that.technologies) &&
             Objects.equals(contact, that.contact) &&
             Objects.equals(address, that.address) &&
-            Objects.equals(observations, that.observations)
-        );
+            Objects.equals(observations, that.observations) &&
+            Objects.equals(userId, that.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, domainOfActivity, technologies, contact, address, observations);
+        return Objects.hash(
+        id,
+        name,
+        description,
+        domainOfActivity,
+        technologies,
+        contact,
+        address,
+        observations,
+        userId
+        );
     }
 
     // prettier-ignore
@@ -159,6 +183,8 @@ public class CompanyCriteria implements Serializable, Criteria {
                 (contact != null ? "contact=" + contact + ", " : "") +
                 (address != null ? "address=" + address + ", " : "") +
                 (observations != null ? "observations=" + observations + ", " : "") +
+                (userId != null ? "userId=" + userId + ", " : "") +
             "}";
     }
+
 }

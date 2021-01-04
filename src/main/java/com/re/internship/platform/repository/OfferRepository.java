@@ -1,6 +1,7 @@
 package com.re.internship.platform.repository;
 
 import com.re.internship.platform.domain.Offer;
+
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface OfferRepository extends JpaRepository<Offer, Long>, JpaSpecificationExecutor<Offer> {}
+public interface OfferRepository extends JpaRepository<Offer, Long>, JpaSpecificationExecutor<Offer> {
+}

@@ -9,6 +9,8 @@ import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } 
 import { ICompany, Company } from 'app/shared/model/company.model';
 import { CompanyService } from './company.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'jhi-company-update',
@@ -16,6 +18,7 @@ import { AlertError } from 'app/shared/alert/alert-error.model';
 })
 export class CompanyUpdateComponent implements OnInit {
   isSaving = false;
+  users: IUser[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -28,12 +31,14 @@ export class CompanyUpdateComponent implements OnInit {
     observations: [],
     presentation: [],
     presentationContentType: [],
+    userId: [],
   });
 
   constructor(
     protected dataUtils: JhiDataUtils,
     protected eventManager: JhiEventManager,
     protected companyService: CompanyService,
+    protected userService: UserService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -41,6 +46,8 @@ export class CompanyUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ company }) => {
       this.updateForm(company);
+
+      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
     });
   }
 
@@ -56,6 +63,7 @@ export class CompanyUpdateComponent implements OnInit {
       observations: company.observations,
       presentation: company.presentation,
       presentationContentType: company.presentationContentType,
+      userId: company.userId,
     });
   }
 
@@ -102,6 +110,7 @@ export class CompanyUpdateComponent implements OnInit {
       observations: this.editForm.get(['observations'])!.value,
       presentationContentType: this.editForm.get(['presentationContentType'])!.value,
       presentation: this.editForm.get(['presentation'])!.value,
+      userId: this.editForm.get(['userId'])!.value,
     };
   }
 
@@ -119,5 +128,9 @@ export class CompanyUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
+  }
+
+  trackById(index: number, item: IUser): any {
+    return item.id;
   }
 }

@@ -25,6 +25,8 @@ export class OfferUpdateComponent implements OnInit {
     paid: [],
     observations: [],
     domain: [],
+    companyId: [],
+    coverImagePath: [],
   });
 
   constructor(protected offerService: OfferService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
@@ -46,6 +48,8 @@ export class OfferUpdateComponent implements OnInit {
       paid: offer.paid,
       observations: offer.observations,
       domain: offer.domain,
+      companyId: offer.companyId,
+      coverImagePath: offer.coverImagePath,
     });
   }
 
@@ -75,6 +79,8 @@ export class OfferUpdateComponent implements OnInit {
       paid: this.editForm.get(['paid'])!.value,
       observations: this.editForm.get(['observations'])!.value,
       domain: this.editForm.get(['domain'])!.value,
+      companyId: this.editForm.get(['companyId'])!.value,
+      coverImagePath: this.editForm.get(['coverImagePath'])!.value,
     };
   }
 

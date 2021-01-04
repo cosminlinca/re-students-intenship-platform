@@ -31,6 +31,7 @@
                     <th scope="col"  jhiSortBy="address"><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.address">Address</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="observations"><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.observations">Observations</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="presentation"><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.presentation">Presentation</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="userLogin"><span jhiTranslate="studentsIntenshipPlatformAvraApp.company.user">User</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -47,6 +48,9 @@
                     <td>
                         <a *ngIf="company.presentation" (click)="openFile(company.presentationContentType, company.presentation)" jhiTranslate="entity.action.open">open</a>
                         <span *ngIf="company.presentation">{{ company.presentationContentType }}, {{ byteSize(company.presentation) }}</span>
+                    </td>
+                    <td>
+                        {{ company.userLogin }}
                     </td>
                     <td class="text-right">
                         <div class="btn-group">

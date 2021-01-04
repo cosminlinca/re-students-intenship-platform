@@ -9,6 +9,8 @@ export interface ICompany {
   observations?: string;
   presentationContentType?: string;
   presentation?: any;
+  userLogin?: string;
+  userId?: number;
 }
 
 export class Company implements ICompany {
@@ -22,6 +24,8 @@ export class Company implements ICompany {
     public address?: string,
     public observations?: string,
     public presentationContentType?: string,
-    public presentation?: any
+    public presentation?: any,
+    public userLogin?: string,
+    public userId?: number
   ) {}
 }

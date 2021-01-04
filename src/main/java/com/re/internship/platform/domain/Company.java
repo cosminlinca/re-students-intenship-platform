@@ -1,7 +1,9 @@
 package com.re.internship.platform.domain;
 
-import java.io.Serializable;
+
 import javax.persistence.*;
+
+import java.io.Serializable;
 
 /**
  * A Company.
@@ -9,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "company")
 public class Company implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -42,6 +45,10 @@ public class Company implements Serializable {
 
     @Column(name = "presentation_content_type")
     private String presentationContentType;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -169,6 +176,18 @@ public class Company implements Serializable {
         this.presentationContentType = presentationContentType;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public Company user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override

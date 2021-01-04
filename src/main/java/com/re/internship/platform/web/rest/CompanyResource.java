@@ -1,17 +1,14 @@
 package com.re.internship.platform.web.rest;
 
-import com.re.internship.platform.service.CompanyQueryService;
 import com.re.internship.platform.service.CompanyService;
-import com.re.internship.platform.service.dto.CompanyCriteria;
-import com.re.internship.platform.service.dto.CompanyDTO;
 import com.re.internship.platform.web.rest.errors.BadRequestAlertException;
+import com.re.internship.platform.service.dto.CompanyDTO;
+import com.re.internship.platform.service.dto.CompanyCriteria;
+import com.re.internship.platform.service.CompanyQueryService;
+
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,9 +16,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing {@link com.re.internship.platform.domain.Company}.
@@ -29,6 +31,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 @RequestMapping("/api")
 public class CompanyResource {
+
     private final Logger log = LoggerFactory.getLogger(CompanyResource.class);
 
     private static final String ENTITY_NAME = "company";
@@ -59,8 +62,7 @@ public class CompanyResource {
             throw new BadRequestAlertException("A new company cannot already have an ID", ENTITY_NAME, "idexists");
         }
         CompanyDTO result = companyService.save(companyDTO);
-        return ResponseEntity
-            .created(new URI("/api/companies/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/companies/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -81,8 +83,7 @@ public class CompanyResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         CompanyDTO result = companyService.save(companyDTO);
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, companyDTO.getId().toString()))
             .body(result);
     }
@@ -137,9 +138,6 @@ public class CompanyResource {
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
         log.debug("REST request to delete Company : {}", id);
         companyService.delete(id);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

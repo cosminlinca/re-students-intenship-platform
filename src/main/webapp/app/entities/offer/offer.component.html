@@ -31,6 +31,8 @@
                     <th scope="col"  jhiSortBy="paid"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.paid">Paid</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="observations"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.observations">Observations</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="domain"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.domain">Domain</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="companyId"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.companyId">Company Id</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"  jhiSortBy="coverImagePath"><span jhiTranslate="studentsIntenshipPlatformAvraApp.offer.coverImagePath">Cover Image Path</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -45,6 +47,8 @@
                     <td>{{ offer.paid }}</td>
                     <td>{{ offer.observations }}</td>
                     <td>{{ offer.domain }}</td>
+                    <td>{{ offer.companyId }}</td>
+                    <td>{{ offer.coverImagePath }}</td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"

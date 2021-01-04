@@ -8,6 +8,8 @@ export interface IOffer {
   paid?: boolean;
   observations?: string;
   domain?: string;
+  companyId?: number;
+  coverImagePath?: string;
 }
 
 export class Offer implements IOffer {
@@ -20,7 +22,9 @@ export class Offer implements IOffer {
     public details?: string,
     public paid?: boolean,
     public observations?: string,
-    public domain?: string
+    public domain?: string,
+    public companyId?: number,
+    public coverImagePath?: string
   ) {
     this.paid = this.paid || false;
   }

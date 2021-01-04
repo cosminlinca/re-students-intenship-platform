@@ -34,6 +34,14 @@
     {
       "fieldName": "domain",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "companyId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "coverImagePath",
+      "fieldType": "String"
     }
   ],
   "changelogDate": "20201231121517",

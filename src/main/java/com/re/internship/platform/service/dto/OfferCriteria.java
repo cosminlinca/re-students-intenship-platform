@@ -1,5 +1,7 @@
 package com.re.internship.platform.service.dto;
 
+import java.io.Serializable;
+import java.util.Objects;
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
@@ -8,8 +10,6 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Criteria class for the {@link com.re.internship.platform.domain.Offer} entity. This class is used
@@ -21,6 +21,7 @@ import java.util.Objects;
  * fix type specific filters.
  */
 public class OfferCriteria implements Serializable, Criteria {
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -41,7 +42,12 @@ public class OfferCriteria implements Serializable, Criteria {
 
     private StringFilter domain;
 
-    public OfferCriteria() {}
+    private LongFilter companyId;
+
+    private StringFilter coverImagePath;
+
+    public OfferCriteria() {
+    }
 
     public OfferCriteria(OfferCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
@@ -53,6 +59,8 @@ public class OfferCriteria implements Serializable, Criteria {
         this.paid = other.paid == null ? null : other.paid.copy();
         this.observations = other.observations == null ? null : other.observations.copy();
         this.domain = other.domain == null ? null : other.domain.copy();
+        this.companyId = other.companyId == null ? null : other.companyId.copy();
+        this.coverImagePath = other.coverImagePath == null ? null : other.coverImagePath.copy();
     }
 
     @Override
@@ -132,6 +140,23 @@ public class OfferCriteria implements Serializable, Criteria {
         this.domain = domain;
     }
 
+    public LongFilter getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(LongFilter companyId) {
+        this.companyId = companyId;
+    }
+
+    public StringFilter getCoverImagePath() {
+        return coverImagePath;
+    }
+
+    public void setCoverImagePath(StringFilter coverImagePath) {
+        this.coverImagePath = coverImagePath;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -141,7 +166,7 @@ public class OfferCriteria implements Serializable, Criteria {
             return false;
         }
         final OfferCriteria that = (OfferCriteria) o;
-        return (
+        return
             Objects.equals(id, that.id) &&
             Objects.equals(positionName, that.positionName) &&
             Objects.equals(programDurationInWeeks, that.programDurationInWeeks) &&
@@ -150,13 +175,26 @@ public class OfferCriteria implements Serializable, Criteria {
             Objects.equals(details, that.details) &&
             Objects.equals(paid, that.paid) &&
             Objects.equals(observations, that.observations) &&
-            Objects.equals(domain, that.domain)
-        );
+            Objects.equals(domain, that.domain) &&
+            Objects.equals(companyId, that.companyId) &&
+            Objects.equals(coverImagePath, that.coverImagePath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, positionName, programDurationInWeeks, requiredSkills, technologies, details, paid, observations, domain);
+        return Objects.hash(
+        id,
+        positionName,
+        programDurationInWeeks,
+        requiredSkills,
+        technologies,
+        details,
+        paid,
+        observations,
+        domain,
+        companyId,
+        coverImagePath
+        );
     }
 
     // prettier-ignore
@@ -172,6 +210,9 @@ public class OfferCriteria implements Serializable, Criteria {
                 (paid != null ? "paid=" + paid + ", " : "") +
                 (observations != null ? "observations=" + observations + ", " : "") +
                 (domain != null ? "domain=" + domain + ", " : "") +
+                (companyId != null ? "companyId=" + companyId + ", " : "") +
+                (coverImagePath != null ? "coverImagePath=" + coverImagePath + ", " : "") +
             "}";
     }
+
 }

@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(OfferService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Offer(0, 'AAAAAAA', 0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', false, 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new Offer(0, 'AAAAAAA', 0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', false, 'AAAAAAA', 'AAAAAAA', 0, 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -62,6 +62,8 @@ describe('Service Tests', () => {
             paid: true,
             observations: 'BBBBBB',
             domain: 'BBBBBB',
+            companyId: 1,
+            coverImagePath: 'BBBBBB',
           },
           elemDefault
         );
@@ -86,6 +88,8 @@ describe('Service Tests', () => {
             paid: true,
             observations: 'BBBBBB',
             domain: 'BBBBBB',
+            companyId: 1,
+            coverImagePath: 'BBBBBB',
           },
           elemDefault
         );

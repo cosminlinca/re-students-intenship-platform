@@ -23,7 +23,8 @@
       "contact": "Contact",
       "address": "Address",
       "observations": "Observations",
-      "presentation": "Presentation"
+      "presentation": "Presentation",
+      "user": "User"
     }
   }
 }

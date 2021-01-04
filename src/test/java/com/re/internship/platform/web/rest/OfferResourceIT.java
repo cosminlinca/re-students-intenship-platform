@@ -1,20 +1,14 @@
 package com.re.internship.platform.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import com.re.internship.platform.StudentsIntenshipPlatformAvraApp;
 import com.re.internship.platform.domain.Offer;
 import com.re.internship.platform.repository.OfferRepository;
-import com.re.internship.platform.service.OfferQueryService;
 import com.re.internship.platform.service.OfferService;
-import com.re.internship.platform.service.dto.OfferCriteria;
 import com.re.internship.platform.service.dto.OfferDTO;
 import com.re.internship.platform.service.mapper.OfferMapper;
-import java.util.List;
-import javax.persistence.EntityManager;
+import com.re.internship.platform.service.dto.OfferCriteria;
+import com.re.internship.platform.service.OfferQueryService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +18,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.EntityManager;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link OfferResource} REST controller.
@@ -32,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser
 public class OfferResourceIT {
+
     private static final String DEFAULT_POSITION_NAME = "AAAAAAAAAA";
     private static final String UPDATED_POSITION_NAME = "BBBBBBBBBB";
 
@@ -56,6 +58,13 @@ public class OfferResourceIT {
 
     private static final String DEFAULT_DOMAIN = "AAAAAAAAAA";
     private static final String UPDATED_DOMAIN = "BBBBBBBBBB";
+
+    private static final Long DEFAULT_COMPANY_ID = 1L;
+    private static final Long UPDATED_COMPANY_ID = 2L;
+    private static final Long SMALLER_COMPANY_ID = 1L - 1L;
+
+    private static final String DEFAULT_COVER_IMAGE_PATH = "AAAAAAAAAA";
+    private static final String UPDATED_COVER_IMAGE_PATH = "BBBBBBBBBB";
 
     @Autowired
     private OfferRepository offerRepository;
@@ -92,10 +101,11 @@ public class OfferResourceIT {
             .details(DEFAULT_DETAILS)
             .paid(DEFAULT_PAID)
             .observations(DEFAULT_OBSERVATIONS)
-            .domain(DEFAULT_DOMAIN);
+            .domain(DEFAULT_DOMAIN)
+            .companyId(DEFAULT_COMPANY_ID)
+            .coverImagePath(DEFAULT_COVER_IMAGE_PATH);
         return offer;
     }
-
     /**
      * Create an updated entity for this test.
      *
@@ -111,7 +121,9 @@ public class OfferResourceIT {
             .details(UPDATED_DETAILS)
             .paid(UPDATED_PAID)
             .observations(UPDATED_OBSERVATIONS)
-            .domain(UPDATED_DOMAIN);
+            .domain(UPDATED_DOMAIN)
+            .companyId(UPDATED_COMPANY_ID)
+            .coverImagePath(UPDATED_COVER_IMAGE_PATH);
         return offer;
     }
 
@@ -126,8 +138,9 @@ public class OfferResourceIT {
         int databaseSizeBeforeCreate = offerRepository.findAll().size();
         // Create the Offer
         OfferDTO offerDTO = offerMapper.toDto(offer);
-        restOfferMockMvc
-            .perform(post("/api/offers").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(offerDTO)))
+        restOfferMockMvc.perform(post("/api/offers")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(offerDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Offer in the database
@@ -142,6 +155,8 @@ public class OfferResourceIT {
         assertThat(testOffer.isPaid()).isEqualTo(DEFAULT_PAID);
         assertThat(testOffer.getObservations()).isEqualTo(DEFAULT_OBSERVATIONS);
         assertThat(testOffer.getDomain()).isEqualTo(DEFAULT_DOMAIN);
+        assertThat(testOffer.getCompanyId()).isEqualTo(DEFAULT_COMPANY_ID);
+        assertThat(testOffer.getCoverImagePath()).isEqualTo(DEFAULT_COVER_IMAGE_PATH);
     }
 
     @Test
@@ -154,14 +169,16 @@ public class OfferResourceIT {
         OfferDTO offerDTO = offerMapper.toDto(offer);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restOfferMockMvc
-            .perform(post("/api/offers").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(offerDTO)))
+        restOfferMockMvc.perform(post("/api/offers")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(offerDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Offer in the database
         List<Offer> offerList = offerRepository.findAll();
         assertThat(offerList).hasSize(databaseSizeBeforeCreate);
     }
+
 
     @Test
     @Transactional
@@ -170,8 +187,7 @@ public class OfferResourceIT {
         offerRepository.saveAndFlush(offer);
 
         // Get all the offerList
-        restOfferMockMvc
-            .perform(get("/api/offers?sort=id,desc"))
+        restOfferMockMvc.perform(get("/api/offers?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(offer.getId().intValue())))
@@ -182,9 +198,11 @@ public class OfferResourceIT {
             .andExpect(jsonPath("$.[*].details").value(hasItem(DEFAULT_DETAILS)))
             .andExpect(jsonPath("$.[*].paid").value(hasItem(DEFAULT_PAID.booleanValue())))
             .andExpect(jsonPath("$.[*].observations").value(hasItem(DEFAULT_OBSERVATIONS)))
-            .andExpect(jsonPath("$.[*].domain").value(hasItem(DEFAULT_DOMAIN)));
+            .andExpect(jsonPath("$.[*].domain").value(hasItem(DEFAULT_DOMAIN)))
+            .andExpect(jsonPath("$.[*].companyId").value(hasItem(DEFAULT_COMPANY_ID.intValue())))
+            .andExpect(jsonPath("$.[*].coverImagePath").value(hasItem(DEFAULT_COVER_IMAGE_PATH)));
     }
-
+    
     @Test
     @Transactional
     public void getOffer() throws Exception {
@@ -192,8 +210,7 @@ public class OfferResourceIT {
         offerRepository.saveAndFlush(offer);
 
         // Get the offer
-        restOfferMockMvc
-            .perform(get("/api/offers/{id}", offer.getId()))
+        restOfferMockMvc.perform(get("/api/offers/{id}", offer.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(offer.getId().intValue()))
@@ -204,8 +221,11 @@ public class OfferResourceIT {
             .andExpect(jsonPath("$.details").value(DEFAULT_DETAILS))
             .andExpect(jsonPath("$.paid").value(DEFAULT_PAID.booleanValue()))
             .andExpect(jsonPath("$.observations").value(DEFAULT_OBSERVATIONS))
-            .andExpect(jsonPath("$.domain").value(DEFAULT_DOMAIN));
+            .andExpect(jsonPath("$.domain").value(DEFAULT_DOMAIN))
+            .andExpect(jsonPath("$.companyId").value(DEFAULT_COMPANY_ID.intValue()))
+            .andExpect(jsonPath("$.coverImagePath").value(DEFAULT_COVER_IMAGE_PATH));
     }
+
 
     @Test
     @Transactional
@@ -224,6 +244,7 @@ public class OfferResourceIT {
         defaultOfferShouldBeFound("id.lessThanOrEqual=" + id);
         defaultOfferShouldNotBeFound("id.lessThan=" + id);
     }
+
 
     @Test
     @Transactional
@@ -276,8 +297,7 @@ public class OfferResourceIT {
         // Get all the offerList where positionName is null
         defaultOfferShouldNotBeFound("positionName.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllOffersByPositionNameContainsSomething() throws Exception {
         // Initialize the database
@@ -302,6 +322,7 @@ public class OfferResourceIT {
         // Get all the offerList where positionName does not contain UPDATED_POSITION_NAME
         defaultOfferShouldBeFound("positionName.doesNotContain=" + UPDATED_POSITION_NAME);
     }
+
 
     @Test
     @Transactional
@@ -336,9 +357,7 @@ public class OfferResourceIT {
         offerRepository.saveAndFlush(offer);
 
         // Get all the offerList where programDurationInWeeks in DEFAULT_PROGRAM_DURATION_IN_WEEKS or UPDATED_PROGRAM_DURATION_IN_WEEKS
-        defaultOfferShouldBeFound(
-            "programDurationInWeeks.in=" + DEFAULT_PROGRAM_DURATION_IN_WEEKS + "," + UPDATED_PROGRAM_DURATION_IN_WEEKS
-        );
+        defaultOfferShouldBeFound("programDurationInWeeks.in=" + DEFAULT_PROGRAM_DURATION_IN_WEEKS + "," + UPDATED_PROGRAM_DURATION_IN_WEEKS);
 
         // Get all the offerList where programDurationInWeeks equals to UPDATED_PROGRAM_DURATION_IN_WEEKS
         defaultOfferShouldNotBeFound("programDurationInWeeks.in=" + UPDATED_PROGRAM_DURATION_IN_WEEKS);
@@ -409,6 +428,7 @@ public class OfferResourceIT {
         defaultOfferShouldBeFound("programDurationInWeeks.greaterThan=" + SMALLER_PROGRAM_DURATION_IN_WEEKS);
     }
 
+
     @Test
     @Transactional
     public void getAllOffersByRequiredSkillsIsEqualToSomething() throws Exception {
@@ -460,8 +480,7 @@ public class OfferResourceIT {
         // Get all the offerList where requiredSkills is null
         defaultOfferShouldNotBeFound("requiredSkills.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllOffersByRequiredSkillsContainsSomething() throws Exception {
         // Initialize the database
@@ -486,6 +505,7 @@ public class OfferResourceIT {
         // Get all the offerList where requiredSkills does not contain UPDATED_REQUIRED_SKILLS
         defaultOfferShouldBeFound("requiredSkills.doesNotContain=" + UPDATED_REQUIRED_SKILLS);
     }
+
 
     @Test
     @Transactional
@@ -538,8 +558,7 @@ public class OfferResourceIT {
         // Get all the offerList where technologies is null
         defaultOfferShouldNotBeFound("technologies.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllOffersByTechnologiesContainsSomething() throws Exception {
         // Initialize the database
@@ -564,6 +583,7 @@ public class OfferResourceIT {
         // Get all the offerList where technologies does not contain UPDATED_TECHNOLOGIES
         defaultOfferShouldBeFound("technologies.doesNotContain=" + UPDATED_TECHNOLOGIES);
     }
+
 
     @Test
     @Transactional
@@ -616,8 +636,7 @@ public class OfferResourceIT {
         // Get all the offerList where details is null
         defaultOfferShouldNotBeFound("details.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllOffersByDetailsContainsSomething() throws Exception {
         // Initialize the database
@@ -642,6 +661,7 @@ public class OfferResourceIT {
         // Get all the offerList where details does not contain UPDATED_DETAILS
         defaultOfferShouldBeFound("details.doesNotContain=" + UPDATED_DETAILS);
     }
+
 
     @Test
     @Transactional
@@ -746,8 +766,7 @@ public class OfferResourceIT {
         // Get all the offerList where observations is null
         defaultOfferShouldNotBeFound("observations.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllOffersByObservationsContainsSomething() throws Exception {
         // Initialize the database
@@ -772,6 +791,7 @@ public class OfferResourceIT {
         // Get all the offerList where observations does not contain UPDATED_OBSERVATIONS
         defaultOfferShouldBeFound("observations.doesNotContain=" + UPDATED_OBSERVATIONS);
     }
+
 
     @Test
     @Transactional
@@ -824,8 +844,7 @@ public class OfferResourceIT {
         // Get all the offerList where domain is null
         defaultOfferShouldNotBeFound("domain.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllOffersByDomainContainsSomething() throws Exception {
         // Initialize the database
@@ -851,12 +870,194 @@ public class OfferResourceIT {
         defaultOfferShouldBeFound("domain.doesNotContain=" + UPDATED_DOMAIN);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllOffersByCompanyIdIsEqualToSomething() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where companyId equals to DEFAULT_COMPANY_ID
+        defaultOfferShouldBeFound("companyId.equals=" + DEFAULT_COMPANY_ID);
+
+        // Get all the offerList where companyId equals to UPDATED_COMPANY_ID
+        defaultOfferShouldNotBeFound("companyId.equals=" + UPDATED_COMPANY_ID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOffersByCompanyIdIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where companyId not equals to DEFAULT_COMPANY_ID
+        defaultOfferShouldNotBeFound("companyId.notEquals=" + DEFAULT_COMPANY_ID);
+
+        // Get all the offerList where companyId not equals to UPDATED_COMPANY_ID
+        defaultOfferShouldBeFound("companyId.notEquals=" + UPDATED_COMPANY_ID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOffersByCompanyIdIsInShouldWork() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where companyId in DEFAULT_COMPANY_ID or UPDATED_COMPANY_ID
+        defaultOfferShouldBeFound("companyId.in=" + DEFAULT_COMPANY_ID + "," + UPDATED_COMPANY_ID);
+
+        // Get all the offerList where companyId equals to UPDATED_COMPANY_ID
+        defaultOfferShouldNotBeFound("companyId.in=" + UPDATED_COMPANY_ID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOffersByCompanyIdIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where companyId is not null
+        defaultOfferShouldBeFound("companyId.specified=true");
+
+        // Get all the offerList where companyId is null
+        defaultOfferShouldNotBeFound("companyId.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllOffersByCompanyIdIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where companyId is greater than or equal to DEFAULT_COMPANY_ID
+        defaultOfferShouldBeFound("companyId.greaterThanOrEqual=" + DEFAULT_COMPANY_ID);
+
+        // Get all the offerList where companyId is greater than or equal to UPDATED_COMPANY_ID
+        defaultOfferShouldNotBeFound("companyId.greaterThanOrEqual=" + UPDATED_COMPANY_ID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOffersByCompanyIdIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where companyId is less than or equal to DEFAULT_COMPANY_ID
+        defaultOfferShouldBeFound("companyId.lessThanOrEqual=" + DEFAULT_COMPANY_ID);
+
+        // Get all the offerList where companyId is less than or equal to SMALLER_COMPANY_ID
+        defaultOfferShouldNotBeFound("companyId.lessThanOrEqual=" + SMALLER_COMPANY_ID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOffersByCompanyIdIsLessThanSomething() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where companyId is less than DEFAULT_COMPANY_ID
+        defaultOfferShouldNotBeFound("companyId.lessThan=" + DEFAULT_COMPANY_ID);
+
+        // Get all the offerList where companyId is less than UPDATED_COMPANY_ID
+        defaultOfferShouldBeFound("companyId.lessThan=" + UPDATED_COMPANY_ID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOffersByCompanyIdIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where companyId is greater than DEFAULT_COMPANY_ID
+        defaultOfferShouldNotBeFound("companyId.greaterThan=" + DEFAULT_COMPANY_ID);
+
+        // Get all the offerList where companyId is greater than SMALLER_COMPANY_ID
+        defaultOfferShouldBeFound("companyId.greaterThan=" + SMALLER_COMPANY_ID);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllOffersByCoverImagePathIsEqualToSomething() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where coverImagePath equals to DEFAULT_COVER_IMAGE_PATH
+        defaultOfferShouldBeFound("coverImagePath.equals=" + DEFAULT_COVER_IMAGE_PATH);
+
+        // Get all the offerList where coverImagePath equals to UPDATED_COVER_IMAGE_PATH
+        defaultOfferShouldNotBeFound("coverImagePath.equals=" + UPDATED_COVER_IMAGE_PATH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOffersByCoverImagePathIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where coverImagePath not equals to DEFAULT_COVER_IMAGE_PATH
+        defaultOfferShouldNotBeFound("coverImagePath.notEquals=" + DEFAULT_COVER_IMAGE_PATH);
+
+        // Get all the offerList where coverImagePath not equals to UPDATED_COVER_IMAGE_PATH
+        defaultOfferShouldBeFound("coverImagePath.notEquals=" + UPDATED_COVER_IMAGE_PATH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOffersByCoverImagePathIsInShouldWork() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where coverImagePath in DEFAULT_COVER_IMAGE_PATH or UPDATED_COVER_IMAGE_PATH
+        defaultOfferShouldBeFound("coverImagePath.in=" + DEFAULT_COVER_IMAGE_PATH + "," + UPDATED_COVER_IMAGE_PATH);
+
+        // Get all the offerList where coverImagePath equals to UPDATED_COVER_IMAGE_PATH
+        defaultOfferShouldNotBeFound("coverImagePath.in=" + UPDATED_COVER_IMAGE_PATH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOffersByCoverImagePathIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where coverImagePath is not null
+        defaultOfferShouldBeFound("coverImagePath.specified=true");
+
+        // Get all the offerList where coverImagePath is null
+        defaultOfferShouldNotBeFound("coverImagePath.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllOffersByCoverImagePathContainsSomething() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where coverImagePath contains DEFAULT_COVER_IMAGE_PATH
+        defaultOfferShouldBeFound("coverImagePath.contains=" + DEFAULT_COVER_IMAGE_PATH);
+
+        // Get all the offerList where coverImagePath contains UPDATED_COVER_IMAGE_PATH
+        defaultOfferShouldNotBeFound("coverImagePath.contains=" + UPDATED_COVER_IMAGE_PATH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllOffersByCoverImagePathNotContainsSomething() throws Exception {
+        // Initialize the database
+        offerRepository.saveAndFlush(offer);
+
+        // Get all the offerList where coverImagePath does not contain DEFAULT_COVER_IMAGE_PATH
+        defaultOfferShouldNotBeFound("coverImagePath.doesNotContain=" + DEFAULT_COVER_IMAGE_PATH);
+
+        // Get all the offerList where coverImagePath does not contain UPDATED_COVER_IMAGE_PATH
+        defaultOfferShouldBeFound("coverImagePath.doesNotContain=" + UPDATED_COVER_IMAGE_PATH);
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
     private void defaultOfferShouldBeFound(String filter) throws Exception {
-        restOfferMockMvc
-            .perform(get("/api/offers?sort=id,desc&" + filter))
+        restOfferMockMvc.perform(get("/api/offers?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(offer.getId().intValue())))
@@ -867,11 +1068,12 @@ public class OfferResourceIT {
             .andExpect(jsonPath("$.[*].details").value(hasItem(DEFAULT_DETAILS)))
             .andExpect(jsonPath("$.[*].paid").value(hasItem(DEFAULT_PAID.booleanValue())))
             .andExpect(jsonPath("$.[*].observations").value(hasItem(DEFAULT_OBSERVATIONS)))
-            .andExpect(jsonPath("$.[*].domain").value(hasItem(DEFAULT_DOMAIN)));
+            .andExpect(jsonPath("$.[*].domain").value(hasItem(DEFAULT_DOMAIN)))
+            .andExpect(jsonPath("$.[*].companyId").value(hasItem(DEFAULT_COMPANY_ID.intValue())))
+            .andExpect(jsonPath("$.[*].coverImagePath").value(hasItem(DEFAULT_COVER_IMAGE_PATH)));
 
         // Check, that the count call also returns 1
-        restOfferMockMvc
-            .perform(get("/api/offers/count?sort=id,desc&" + filter))
+        restOfferMockMvc.perform(get("/api/offers/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("1"));
@@ -881,16 +1083,14 @@ public class OfferResourceIT {
      * Executes the search, and checks that the default entity is not returned.
      */
     private void defaultOfferShouldNotBeFound(String filter) throws Exception {
-        restOfferMockMvc
-            .perform(get("/api/offers?sort=id,desc&" + filter))
+        restOfferMockMvc.perform(get("/api/offers?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
 
         // Check, that the count call also returns 0
-        restOfferMockMvc
-            .perform(get("/api/offers/count?sort=id,desc&" + filter))
+        restOfferMockMvc.perform(get("/api/offers/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
@@ -900,7 +1100,8 @@ public class OfferResourceIT {
     @Transactional
     public void getNonExistingOffer() throws Exception {
         // Get the offer
-        restOfferMockMvc.perform(get("/api/offers/{id}", Long.MAX_VALUE)).andExpect(status().isNotFound());
+        restOfferMockMvc.perform(get("/api/offers/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
     }
 
     @Test
@@ -923,11 +1124,14 @@ public class OfferResourceIT {
             .details(UPDATED_DETAILS)
             .paid(UPDATED_PAID)
             .observations(UPDATED_OBSERVATIONS)
-            .domain(UPDATED_DOMAIN);
+            .domain(UPDATED_DOMAIN)
+            .companyId(UPDATED_COMPANY_ID)
+            .coverImagePath(UPDATED_COVER_IMAGE_PATH);
         OfferDTO offerDTO = offerMapper.toDto(updatedOffer);
 
-        restOfferMockMvc
-            .perform(put("/api/offers").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(offerDTO)))
+        restOfferMockMvc.perform(put("/api/offers")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(offerDTO)))
             .andExpect(status().isOk());
 
         // Validate the Offer in the database
@@ -942,6 +1146,8 @@ public class OfferResourceIT {
         assertThat(testOffer.isPaid()).isEqualTo(UPDATED_PAID);
         assertThat(testOffer.getObservations()).isEqualTo(UPDATED_OBSERVATIONS);
         assertThat(testOffer.getDomain()).isEqualTo(UPDATED_DOMAIN);
+        assertThat(testOffer.getCompanyId()).isEqualTo(UPDATED_COMPANY_ID);
+        assertThat(testOffer.getCoverImagePath()).isEqualTo(UPDATED_COVER_IMAGE_PATH);
     }
 
     @Test
@@ -953,8 +1159,9 @@ public class OfferResourceIT {
         OfferDTO offerDTO = offerMapper.toDto(offer);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restOfferMockMvc
-            .perform(put("/api/offers").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(offerDTO)))
+        restOfferMockMvc.perform(put("/api/offers")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(offerDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Offer in the database
@@ -971,8 +1178,8 @@ public class OfferResourceIT {
         int databaseSizeBeforeDelete = offerRepository.findAll().size();
 
         // Delete the offer
-        restOfferMockMvc
-            .perform(delete("/api/offers/{id}", offer.getId()).accept(MediaType.APPLICATION_JSON))
+        restOfferMockMvc.perform(delete("/api/offers/{id}", offer.getId())
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

@@ -1,20 +1,15 @@
 package com.re.internship.platform.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import com.re.internship.platform.StudentsIntenshipPlatformAvraApp;
 import com.re.internship.platform.domain.Company;
+import com.re.internship.platform.domain.User;
 import com.re.internship.platform.repository.CompanyRepository;
-import com.re.internship.platform.service.CompanyQueryService;
 import com.re.internship.platform.service.CompanyService;
-import com.re.internship.platform.service.dto.CompanyCriteria;
 import com.re.internship.platform.service.dto.CompanyDTO;
 import com.re.internship.platform.service.mapper.CompanyMapper;
-import java.util.List;
-import javax.persistence.EntityManager;
+import com.re.internship.platform.service.dto.CompanyCriteria;
+import com.re.internship.platform.service.CompanyQueryService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +20,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
+import javax.persistence.EntityManager;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link CompanyResource} REST controller.
@@ -33,6 +35,7 @@ import org.springframework.util.Base64Utils;
 @AutoConfigureMockMvc
 @WithMockUser
 public class CompanyResourceIT {
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
@@ -98,7 +101,6 @@ public class CompanyResourceIT {
             .presentationContentType(DEFAULT_PRESENTATION_CONTENT_TYPE);
         return company;
     }
-
     /**
      * Create an updated entity for this test.
      *
@@ -130,8 +132,9 @@ public class CompanyResourceIT {
         int databaseSizeBeforeCreate = companyRepository.findAll().size();
         // Create the Company
         CompanyDTO companyDTO = companyMapper.toDto(company);
-        restCompanyMockMvc
-            .perform(post("/api/companies").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyDTO)))
+        restCompanyMockMvc.perform(post("/api/companies")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(companyDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Company in the database
@@ -159,14 +162,16 @@ public class CompanyResourceIT {
         CompanyDTO companyDTO = companyMapper.toDto(company);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restCompanyMockMvc
-            .perform(post("/api/companies").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyDTO)))
+        restCompanyMockMvc.perform(post("/api/companies")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(companyDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Company in the database
         List<Company> companyList = companyRepository.findAll();
         assertThat(companyList).hasSize(databaseSizeBeforeCreate);
     }
+
 
     @Test
     @Transactional
@@ -175,8 +180,7 @@ public class CompanyResourceIT {
         companyRepository.saveAndFlush(company);
 
         // Get all the companyList
-        restCompanyMockMvc
-            .perform(get("/api/companies?sort=id,desc"))
+        restCompanyMockMvc.perform(get("/api/companies?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(company.getId().intValue())))
@@ -190,7 +194,7 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.[*].presentationContentType").value(hasItem(DEFAULT_PRESENTATION_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].presentation").value(hasItem(Base64Utils.encodeToString(DEFAULT_PRESENTATION))));
     }
-
+    
     @Test
     @Transactional
     public void getCompany() throws Exception {
@@ -198,8 +202,7 @@ public class CompanyResourceIT {
         companyRepository.saveAndFlush(company);
 
         // Get the company
-        restCompanyMockMvc
-            .perform(get("/api/companies/{id}", company.getId()))
+        restCompanyMockMvc.perform(get("/api/companies/{id}", company.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(company.getId().intValue()))
@@ -213,6 +216,7 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.presentationContentType").value(DEFAULT_PRESENTATION_CONTENT_TYPE))
             .andExpect(jsonPath("$.presentation").value(Base64Utils.encodeToString(DEFAULT_PRESENTATION)));
     }
+
 
     @Test
     @Transactional
@@ -231,6 +235,7 @@ public class CompanyResourceIT {
         defaultCompanyShouldBeFound("id.lessThanOrEqual=" + id);
         defaultCompanyShouldNotBeFound("id.lessThan=" + id);
     }
+
 
     @Test
     @Transactional
@@ -283,8 +288,7 @@ public class CompanyResourceIT {
         // Get all the companyList where name is null
         defaultCompanyShouldNotBeFound("name.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllCompaniesByNameContainsSomething() throws Exception {
         // Initialize the database
@@ -309,6 +313,7 @@ public class CompanyResourceIT {
         // Get all the companyList where name does not contain UPDATED_NAME
         defaultCompanyShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
     }
+
 
     @Test
     @Transactional
@@ -361,8 +366,7 @@ public class CompanyResourceIT {
         // Get all the companyList where description is null
         defaultCompanyShouldNotBeFound("description.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllCompaniesByDescriptionContainsSomething() throws Exception {
         // Initialize the database
@@ -387,6 +391,7 @@ public class CompanyResourceIT {
         // Get all the companyList where description does not contain UPDATED_DESCRIPTION
         defaultCompanyShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
     }
+
 
     @Test
     @Transactional
@@ -439,8 +444,7 @@ public class CompanyResourceIT {
         // Get all the companyList where domainOfActivity is null
         defaultCompanyShouldNotBeFound("domainOfActivity.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllCompaniesByDomainOfActivityContainsSomething() throws Exception {
         // Initialize the database
@@ -465,6 +469,7 @@ public class CompanyResourceIT {
         // Get all the companyList where domainOfActivity does not contain UPDATED_DOMAIN_OF_ACTIVITY
         defaultCompanyShouldBeFound("domainOfActivity.doesNotContain=" + UPDATED_DOMAIN_OF_ACTIVITY);
     }
+
 
     @Test
     @Transactional
@@ -517,8 +522,7 @@ public class CompanyResourceIT {
         // Get all the companyList where technologies is null
         defaultCompanyShouldNotBeFound("technologies.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllCompaniesByTechnologiesContainsSomething() throws Exception {
         // Initialize the database
@@ -543,6 +547,7 @@ public class CompanyResourceIT {
         // Get all the companyList where technologies does not contain UPDATED_TECHNOLOGIES
         defaultCompanyShouldBeFound("technologies.doesNotContain=" + UPDATED_TECHNOLOGIES);
     }
+
 
     @Test
     @Transactional
@@ -595,8 +600,7 @@ public class CompanyResourceIT {
         // Get all the companyList where contact is null
         defaultCompanyShouldNotBeFound("contact.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllCompaniesByContactContainsSomething() throws Exception {
         // Initialize the database
@@ -621,6 +625,7 @@ public class CompanyResourceIT {
         // Get all the companyList where contact does not contain UPDATED_CONTACT
         defaultCompanyShouldBeFound("contact.doesNotContain=" + UPDATED_CONTACT);
     }
+
 
     @Test
     @Transactional
@@ -673,8 +678,7 @@ public class CompanyResourceIT {
         // Get all the companyList where address is null
         defaultCompanyShouldNotBeFound("address.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllCompaniesByAddressContainsSomething() throws Exception {
         // Initialize the database
@@ -699,6 +703,7 @@ public class CompanyResourceIT {
         // Get all the companyList where address does not contain UPDATED_ADDRESS
         defaultCompanyShouldBeFound("address.doesNotContain=" + UPDATED_ADDRESS);
     }
+
 
     @Test
     @Transactional
@@ -751,8 +756,7 @@ public class CompanyResourceIT {
         // Get all the companyList where observations is null
         defaultCompanyShouldNotBeFound("observations.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
     public void getAllCompaniesByObservationsContainsSomething() throws Exception {
         // Initialize the database
@@ -778,12 +782,31 @@ public class CompanyResourceIT {
         defaultCompanyShouldBeFound("observations.doesNotContain=" + UPDATED_OBSERVATIONS);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllCompaniesByUserIsEqualToSomething() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+        User user = UserResourceIT.createEntity(em);
+        em.persist(user);
+        em.flush();
+        company.setUser(user);
+        companyRepository.saveAndFlush(company);
+        Long userId = user.getId();
+
+        // Get all the companyList where user equals to userId
+        defaultCompanyShouldBeFound("userId.equals=" + userId);
+
+        // Get all the companyList where user equals to userId + 1
+        defaultCompanyShouldNotBeFound("userId.equals=" + (userId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
     private void defaultCompanyShouldBeFound(String filter) throws Exception {
-        restCompanyMockMvc
-            .perform(get("/api/companies?sort=id,desc&" + filter))
+        restCompanyMockMvc.perform(get("/api/companies?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(company.getId().intValue())))
@@ -798,8 +821,7 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.[*].presentation").value(hasItem(Base64Utils.encodeToString(DEFAULT_PRESENTATION))));
 
         // Check, that the count call also returns 1
-        restCompanyMockMvc
-            .perform(get("/api/companies/count?sort=id,desc&" + filter))
+        restCompanyMockMvc.perform(get("/api/companies/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("1"));
@@ -809,16 +831,14 @@ public class CompanyResourceIT {
      * Executes the search, and checks that the default entity is not returned.
      */
     private void defaultCompanyShouldNotBeFound(String filter) throws Exception {
-        restCompanyMockMvc
-            .perform(get("/api/companies?sort=id,desc&" + filter))
+        restCompanyMockMvc.perform(get("/api/companies?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
 
         // Check, that the count call also returns 0
-        restCompanyMockMvc
-            .perform(get("/api/companies/count?sort=id,desc&" + filter))
+        restCompanyMockMvc.perform(get("/api/companies/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
@@ -828,7 +848,8 @@ public class CompanyResourceIT {
     @Transactional
     public void getNonExistingCompany() throws Exception {
         // Get the company
-        restCompanyMockMvc.perform(get("/api/companies/{id}", Long.MAX_VALUE)).andExpect(status().isNotFound());
+        restCompanyMockMvc.perform(get("/api/companies/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
     }
 
     @Test
@@ -855,8 +876,9 @@ public class CompanyResourceIT {
             .presentationContentType(UPDATED_PRESENTATION_CONTENT_TYPE);
         CompanyDTO companyDTO = companyMapper.toDto(updatedCompany);
 
-        restCompanyMockMvc
-            .perform(put("/api/companies").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyDTO)))
+        restCompanyMockMvc.perform(put("/api/companies")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(companyDTO)))
             .andExpect(status().isOk());
 
         // Validate the Company in the database
@@ -883,8 +905,9 @@ public class CompanyResourceIT {
         CompanyDTO companyDTO = companyMapper.toDto(company);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restCompanyMockMvc
-            .perform(put("/api/companies").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyDTO)))
+        restCompanyMockMvc.perform(put("/api/companies")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(companyDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Company in the database
@@ -901,8 +924,8 @@ public class CompanyResourceIT {
         int databaseSizeBeforeDelete = companyRepository.findAll().size();
 
         // Delete the company
-        restCompanyMockMvc
-            .perform(delete("/api/companies/{id}", company.getId()).accept(MediaType.APPLICATION_JSON))
+        restCompanyMockMvc.perform(delete("/api/companies/{id}", company.getId())
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

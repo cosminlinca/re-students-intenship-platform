@@ -7,6 +7,7 @@ import javax.persistence.Lob;
  * A DTO for the {@link com.re.internship.platform.domain.Company} entity.
  */
 public class CompanyDTO implements Serializable {
+    
     private Long id;
 
     private String name;
@@ -28,6 +29,10 @@ public class CompanyDTO implements Serializable {
 
     private String presentationContentType;
 
+    private Long userId;
+
+    private String userLogin;
+    
     public Long getId() {
         return id;
     }
@@ -108,6 +113,22 @@ public class CompanyDTO implements Serializable {
         this.presentationContentType = presentationContentType;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -138,6 +159,8 @@ public class CompanyDTO implements Serializable {
             ", address='" + getAddress() + "'" +
             ", observations='" + getObservations() + "'" +
             ", presentation='" + getPresentation() + "'" +
+            ", userId=" + getUserId() +
+            ", userLogin='" + getUserLogin() + "'" +
             "}";
     }
 }

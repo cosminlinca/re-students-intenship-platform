@@ -6,6 +6,7 @@ import java.io.Serializable;
  * A DTO for the {@link com.re.internship.platform.domain.Offer} entity.
  */
 public class OfferDTO implements Serializable {
+    
     private Long id;
 
     private String positionName;
@@ -24,6 +25,11 @@ public class OfferDTO implements Serializable {
 
     private String domain;
 
+    private Long companyId;
+
+    private String coverImagePath;
+
+    
     public Long getId() {
         return id;
     }
@@ -96,6 +102,22 @@ public class OfferDTO implements Serializable {
         this.domain = domain;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCoverImagePath() {
+        return coverImagePath;
+    }
+
+    public void setCoverImagePath(String coverImagePath) {
+        this.coverImagePath = coverImagePath;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -126,6 +148,8 @@ public class OfferDTO implements Serializable {
             ", paid='" + isPaid() + "'" +
             ", observations='" + getObservations() + "'" +
             ", domain='" + getDomain() + "'" +
+            ", companyId=" + getCompanyId() +
+            ", coverImagePath='" + getCoverImagePath() + "'" +
             "}";
     }
 }
