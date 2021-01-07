@@ -11,6 +11,7 @@
         "student": "Student",
         "offer": "Offer",
         "company": "Company",
+        "offerApplication": "Offer Application",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

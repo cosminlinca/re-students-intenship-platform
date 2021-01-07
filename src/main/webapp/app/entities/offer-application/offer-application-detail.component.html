@@ -1,0 +1,41 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="offerApplication">
+            <h2><span jhiTranslate="studentsIntenshipPlatformAvraApp.offerApplication.detail.title">Offer Application</span> {{ offerApplication.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.offerApplication.idStudent">Id Student</span></dt>
+                <dd>
+                    <span>{{ offerApplication.idStudent }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.offerApplication.idOffer">Id Offer</span></dt>
+                <dd>
+                    <span>{{ offerApplication.idOffer }}</span>
+                </dd>
+                <dt><span jhiTranslate="studentsIntenshipPlatformAvraApp.offerApplication.attachedCV">Attached CV</span></dt>
+                <dd>
+                    <div *ngIf="offerApplication.attachedCV">
+                        <a (click)="openFile(offerApplication.attachedCVContentType, offerApplication.attachedCV)" jhiTranslate="entity.action.open">open</a>
+                        {{ offerApplication.attachedCVContentType }}, {{ byteSize(offerApplication.attachedCV) }}
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/offer-application', offerApplication.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

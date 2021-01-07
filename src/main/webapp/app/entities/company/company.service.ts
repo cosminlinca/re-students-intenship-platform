@@ -11,16 +11,16 @@ type EntityArrayResponseType = HttpResponse<ICompany[]>;
 
 @Injectable({ providedIn: 'root' })
 export class CompanyService {
-  public resourceUrl = SERVER_API_URL + 'api/companies';
+  public resourceUrl = SERVER_API_URL + 'api/registerCompany';
 
   constructor(protected http: HttpClient) {}
 
   create(company: ICompany): Observable<EntityResponseType> {
-    return this.http.post<ICompany>(this.resourceUrl, company, { observe: 'response' });
+    return this.http.post<ICompany>('api/registerCompany', company, { observe: 'response' });
   }
 
   update(company: ICompany): Observable<EntityResponseType> {
-    return this.http.put<ICompany>(this.resourceUrl, company, { observe: 'response' });
+    return this.http.post<ICompany>(this.resourceUrl, company, { observe: 'response' });
   }
 
   find(id: number): Observable<EntityResponseType> {

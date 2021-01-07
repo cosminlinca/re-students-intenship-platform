@@ -1,6 +1,12 @@
 package com.re.internship.platform.web.rest.vm;
 
+import com.re.internship.platform.domain.User;
 import com.re.internship.platform.service.dto.UserDTO;
+
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Size;
 
 /**
@@ -33,6 +39,86 @@ public class ManagedUserVM extends UserDTO {
     private byte[] cvDocument;
 
     private String cvDocumentContentType;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDomainOfActivity() {
+        return domainOfActivity;
+    }
+
+    public void setDomainOfActivity(String domainOfActivity) {
+        this.domainOfActivity = domainOfActivity;
+    }
+
+    public String getTechnologies() {
+        return technologies;
+    }
+
+    public void setTechnologies(String technologies) {
+        this.technologies = technologies;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public byte[] getPresentation() {
+        return presentation;
+    }
+
+    public void setPresentation(byte[] presentation) {
+        this.presentation = presentation;
+    }
+
+    public String getPresentationContentType() {
+        return presentationContentType;
+    }
+
+    public void setPresentationContentType(String presentationContentType) {
+        this.presentationContentType = presentationContentType;
+    }
+
+    private String name;
+
+    private String description;
+
+    private String domainOfActivity;
+
+    private String technologies;
+
+    private String contact;
+
+    private String address;
+
+    private byte[] presentation;
+
+    private String presentationContentType;
 
     public String getUniversity() {
         return university;

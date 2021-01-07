@@ -1,12 +1,15 @@
 package com.re.internship.platform.web.rest;
 
+import com.re.internship.platform.domain.Company;
 import com.re.internship.platform.domain.Student;
 import com.re.internship.platform.domain.User;
 import com.re.internship.platform.repository.UserRepository;
 import com.re.internship.platform.security.SecurityUtils;
+import com.re.internship.platform.service.CompanyService;
 import com.re.internship.platform.service.MailService;
 import com.re.internship.platform.service.StudentService;
 import com.re.internship.platform.service.UserService;
+import com.re.internship.platform.service.dto.CompanyDTO;
 import com.re.internship.platform.service.dto.PasswordChangeDTO;
 import com.re.internship.platform.service.dto.UserDTO;
 import com.re.internship.platform.web.rest.errors.*;
@@ -41,16 +44,19 @@ public class AccountResource {
 
     private final UserService userService;
 
+    private CompanyService companyService;
+
     private final StudentService studentService;
 
     private final MailService mailService;
 
     public AccountResource(UserRepository userRepository, UserService userService, MailService mailService,
-                           StudentService studentService) {
+                           StudentService studentService, CompanyService companyService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
         this.studentService = studentService;
+        this.companyService = companyService;
     }
 
     /**
@@ -76,8 +82,35 @@ public class AccountResource {
 
         // Create student based on created user account
         this.studentService.save(student);
+//        mailService.sendActivationEmail(user);
+    }
 
-        mailService.sendActivationEmail(user);
+    /**
+     * {@code POST  /register} : register the user.
+     *
+     * @param managedUserVM the managed user View Model.
+     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
+     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
+     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
+     */
+    @PostMapping("/registerCompany")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void registerCompanyAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+        if (!checkPasswordLength(managedUserVM.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+
+        // Create user for company
+        User user = userService.registerCompany(managedUserVM, managedUserVM.getPassword());
+        CompanyDTO company = new CompanyDTO(managedUserVM.getName(), managedUserVM.getDescription(),
+            managedUserVM.getDomainOfActivity(), managedUserVM.getTechnologies(), managedUserVM.getContact(),
+            managedUserVM.getAddress(), managedUserVM.getObservations(), managedUserVM.getPresentation(),
+            managedUserVM.getPresentationContentType(), user.getId());
+
+        // Create company based on created user account
+        this.companyService.save(company);
+
+//        mailService.sendActivationEmail(user);
     }
 
     /**

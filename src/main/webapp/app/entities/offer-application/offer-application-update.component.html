@@ -1,0 +1,57 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-offer-application-heading" jhiTranslate="studentsIntenshipPlatformAvraApp.offerApplication.home.createOrEditLabel">Create or edit a Offer Application</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.offerApplication.idStudent" for="field_idStudent">Id Student</label>
+                    <input type="number" class="form-control" name="idStudent" id="field_idStudent"
+                           formControlName="idStudent"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.offerApplication.idOffer" for="field_idOffer">Id Offer</label>
+                    <input type="number" class="form-control" name="idOffer" id="field_idOffer"
+                           formControlName="idOffer"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="studentsIntenshipPlatformAvraApp.offerApplication.attachedCV" for="field_attachedCV">Attached CV</label>
+                    <div>
+                        <div *ngIf="editForm.get('attachedCV')!.value" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(editForm.get('attachedCVContentType')!.value, editForm.get('attachedCV')!.value)" jhiTranslate="entity.action.open">open</a><br>
+                            <span class="pull-left">{{ editForm.get('attachedCVContentType')!.value }}, {{ byteSize(editForm.get('attachedCV')!.value) }}</span>
+                            <button type="button" (click)="editForm.patchValue({attachedCV: null});editForm.patchValue({attachedCVContentType: null});"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon icon="times"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_attachedCV" (change)="setFileData($event, 'attachedCV', false)" jhiTranslate="entity.action.addblob"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="attachedCV" id="field_attachedCV"
+                           formControlName="attachedCV"/>
+                    <input type="hidden" class="form-control" name="attachedCVContentType" id="field_attachedCVContentType"
+                           formControlName="attachedCVContentType" />
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,6 +1,5 @@
 <div class="row">
     <div *ngIf="!isAuthenticated()" class="col-md-3">
-        <h1 class="display-4">Welcome to Student's Internship Platform!</h1>
         <span class="mainLogo img-fluid rounded"></span>
     </div>
 
@@ -55,7 +54,7 @@
                                         <mat-card-title>{{offer.positionName}}</mat-card-title>
                                     </mat-card-header>
                                     <mat-card-actions>
-                                        <button mat-raised-button [routerLink]="['/offer', offer.id, 'details']">DETAILS</button>
+                                        <button mat-raised-button [routerLink]="['/offer', offer.id, 'view']">DETAILS</button>
                                         <button mat-raised-button (click)="applyToOffer(offer)">APPLY</button>
                                     </mat-card-actions>
                                     <mat-card-content>
@@ -74,6 +73,8 @@
                         </div>
                 </div>
             </div>
+
+            <h1 class="display-4" *ngIf="!isAuthenticated()">Welcome to Student's Internship Platform!</h1>
 
             <div class="alert alert-warning" *ngSwitchCase="false">
                 <span jhiTranslate="global.messages.info.authenticated.prefix">If you want to </span>

@@ -1,0 +1,24 @@
+{
+  "studentsIntenshipPlatformAvraApp": {
+    "offerApplication": {
+      "home": {
+        "title": "Offer Applications",
+        "createLabel": "Create a new Offer Application",
+        "createOrEditLabel": "Create or edit a Offer Application",
+        "notFound": "No Offer Applications found"
+      },
+      "created": "A new Offer Application is created with identifier {{ param }}",
+      "updated": "A Offer Application is updated with identifier {{ param }}",
+      "deleted": "A Offer Application is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Offer Application {{ id }}?"
+      },
+      "detail": {
+        "title": "Offer Application"
+      },
+      "idStudent": "Id Student",
+      "idOffer": "Id Offer",
+      "attachedCV": "Attached CV"
+    }
+  }
+}

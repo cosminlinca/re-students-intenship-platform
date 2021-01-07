@@ -12,27 +12,27 @@ import { CompanyComponent } from './company.component';
 import { CompanyDetailComponent } from './company-detail.component';
 import { CompanyUpdateComponent } from './company-update.component';
 
-@Injectable({ providedIn: 'root' })
-export class CompanyResolve implements Resolve<ICompany> {
-  constructor(private service: CompanyService, private router: Router) {}
-
-  resolve(route: ActivatedRouteSnapshot): Observable<ICompany> | Observable<never> {
-    const id = route.params['id'];
-    if (id) {
-      return this.service.find(id).pipe(
-        flatMap((company: HttpResponse<Company>) => {
-          if (company.body) {
-            return of(company.body);
-          } else {
-            this.router.navigate(['404']);
-            return EMPTY;
-          }
-        })
-      );
-    }
-    return of(new Company());
-  }
-}
+// @Injectable({ providedIn: 'root' })
+// export class CompanyResolve implements Resolve<ICompany> {
+//   constructor(private service: CompanyService, private router: Router) {}
+//
+//   resolve(route: ActivatedRouteSnapshot): Observable<ICompany> | Observable<never> {
+//     const id = route.params['id'];
+//     if (id) {
+//       return this.service.find(id).pipe(
+//         flatMap((company: HttpResponse<Company>) => {
+//           if (company.body) {
+//             return of(company.body);
+//           } else {
+//             this.router.navigate(['404']);
+//             return EMPTY;
+//           }
+//         })
+//       );
+//     }
+//     return of(new Company());
+//   }
+// }
 
 export const companyRoute: Routes = [
   {
@@ -48,9 +48,6 @@ export const companyRoute: Routes = [
   {
     path: ':id/view',
     component: CompanyDetailComponent,
-    resolve: {
-      company: CompanyResolve,
-    },
     data: {
       authorities: [Authority.USER],
       pageTitle: 'studentsIntenshipPlatformAvraApp.company.home.title',
@@ -60,21 +57,13 @@ export const companyRoute: Routes = [
   {
     path: 'new',
     component: CompanyUpdateComponent,
-    resolve: {
-      company: CompanyResolve,
-    },
     data: {
-      authorities: [Authority.USER],
-      pageTitle: 'studentsIntenshipPlatformAvraApp.company.home.title',
+      pageTitle: 'Register',
     },
-    canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/edit',
     component: CompanyUpdateComponent,
-    resolve: {
-      company: CompanyResolve,
-    },
     data: {
       authorities: [Authority.USER],
       pageTitle: 'studentsIntenshipPlatformAvraApp.company.home.title',
