@@ -14,6 +14,7 @@ import { OfferService } from './offer.service';
 })
 export class OfferUpdateComponent implements OnInit {
   isSaving = false;
+  offer: IOffer | null = null;
 
   editForm = this.fb.group({
     id: [],
@@ -33,6 +34,7 @@ export class OfferUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ offer }) => {
+      this.offer = offer;
       this.updateForm(offer);
     });
   }

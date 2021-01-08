@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
-import { Observable, of, EMPTY } from 'rxjs';
+import { ActivatedRouteSnapshot, Resolve, Router, Routes } from '@angular/router';
+import { EMPTY, Observable, of } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
 import { Authority } from 'app/shared/constants/authority.constants';
@@ -18,10 +18,14 @@ export class OfferResolve implements Resolve<IOffer> {
 
   resolve(route: ActivatedRouteSnapshot): Observable<IOffer> | Observable<never> {
     const id = route.params['id'];
+    const compId = route.params['compId'];
     if (id) {
       return this.service.find(id).pipe(
         flatMap((offer: HttpResponse<Offer>) => {
           if (offer.body) {
+            if (compId) {
+              offer.body.companyId = compId;
+            }
             return of(offer.body);
           } else {
             this.router.navigate(['404']);
@@ -30,7 +34,11 @@ export class OfferResolve implements Resolve<IOffer> {
         })
       );
     }
-    return of(new Offer());
+    const offer = new Offer();
+    if (compId) {
+      offer.companyId = compId;
+    }
+    return of(offer);
   }
 }
 
@@ -53,6 +61,18 @@ export const offerRoute: Routes = [
     },
     data: {
       authorities: [Authority.USER],
+      pageTitle: 'studentsIntenshipPlatformAvraApp.offer.home.title',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'new/:compId',
+    component: OfferUpdateComponent,
+    resolve: {
+      offer: OfferResolve,
+    },
+    data: {
+      authorities: [Authority.USER, Authority.COMPANY],
       pageTitle: 'studentsIntenshipPlatformAvraApp.offer.home.title',
     },
     canActivate: [UserRouteAccessService],
