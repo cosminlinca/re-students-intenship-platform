@@ -12,6 +12,10 @@ Main page styles
   background-size: contain;
 }
 
+//div > .ng-star-inserted {
+//  max-width: 30%;
+//}
+
 mat-toolbar {
   justify-content: space-between;
 }
@@ -28,8 +32,8 @@ mat-card-title {
 }
 
 mat-card-content {
-  height: 230px;
-  max-height: 230px;
+  height: 220px;
+  max-height: 220px;
   overflow-y: hidden;
 }
 

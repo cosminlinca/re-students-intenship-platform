@@ -17,10 +17,10 @@
 
                 <div *ngIf="isCompany()">
                     <div fxLayout="row wrap" fxLayoutGap="16px grid">
-                        <div fxFlex="20%" fxFlex.xs="100%" fxFlex.sm="33%" fxFlexAlign="stretch"
+                        <div fxFlex="20%" fxFlex.xs="100%" fxFlex.sm="33%"
                              *ngFor="let offer of offersCompany">
                             <mat-card>
-                                <img mat-card-image src="https://ultima-ora.ro/wp-content/uploads/joboffer-678x381.jpg">
+                                <img mat-card-image src="{{offer.coverImagePath}}">
                                 <mat-card-header>
                                     <mat-card-title>{{offer.positionName}}</mat-card-title>
                                 </mat-card-header>
@@ -74,17 +74,17 @@
 
 
                     <div fxLayout="row wrap" fxLayoutGap="16px grid">
-                        <div fxFlex="20%" fxFlex.xs="100%" fxFlex.sm="33%" fxFlexAlign="stretch"
+                        <div fxFlex="20%" fxFlex.xs="100%" fxFlex.sm="33%"
                              *ngFor="let offer of offersStud">
                             <mat-card>
-                                <img mat-card-image src="https://ultima-ora.ro/wp-content/uploads/joboffer-678x381.jpg">
+                                <img mat-card-image src="{{offer.coverImagePath}}">
                                 <mat-card-header>
                                     <mat-card-title>{{offer.positionName}}</mat-card-title>
                                 </mat-card-header>
                                 <mat-card-actions>
                                     <button mat-raised-button [routerLink]="['/offer', offer.id, 'view']">DETAILS
                                     </button>
-                                    <button mat-raised-button (click)="applyToOffer(offer)">APPLY</button>
+<!--                                    <button mat-raised-button (click)="applyToOffer(offer)">APPLY</button>-->
                                 </mat-card-actions>
                                 <mat-card-content>
                                     <p>
