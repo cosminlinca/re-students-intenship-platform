@@ -9,7 +9,7 @@ import { IOffer } from 'app/shared/model/offer.model';
 import { OfferService } from 'app/entities/offer/offer.service';
 import { ICompany } from 'app/shared/model/company.model';
 import { CompanyService } from 'app/entities/company/company.service';
-
+import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
   selector: 'jhi-home',
   templateUrl: './home.component.html',
@@ -22,14 +22,23 @@ export class HomeComponent implements OnInit, OnDestroy {
   offersStud?: IOffer[];
   offersCompany?: IOffer[];
   authSubscription?: Subscription;
+  paidSelected = 'Not_Mentioned';
+  domainSelected = '';
+  domains: any;
+  positionFilter: FormGroup;
 
   constructor(
     private accountService: AccountService,
     private loginModalService: LoginModalService,
     protected offerService: OfferService,
     protected companyService: CompanyService,
-    protected router: Router
-  ) {}
+    protected router: Router,
+    private formBuilder: FormBuilder
+  ) {
+    this.positionFilter = this.formBuilder.group({
+      positionTextFilter: [null, []],
+    });
+  }
 
   ngOnInit(): void {
     this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => {
@@ -45,6 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.offerService.query({}).subscribe(
       (res: HttpResponse<IOffer[]>) => {
         this.offersStud = res.body || [];
+        this.domains = this.offersStud.filter(value => value.domain !== '').map(offer => offer.domain);
       },
       () => {
         this.offersStud = [];
@@ -104,5 +114,33 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
     }
+  }
+
+  onFilterOffers(): void {
+    this.offerService.query({}).subscribe(
+      (res: HttpResponse<IOffer[]>) => {
+        this.offersStud = res.body || [];
+
+        let selected: boolean;
+        switch (this.paidSelected) {
+          case 'Paid': {
+            selected = true;
+            break;
+          }
+          case 'Unpaid': {
+            selected = false;
+            break;
+          }
+        }
+        if (this.paidSelected !== '') this.offersStud = this.offersStud.filter(value => value.paid === selected);
+        if (this.domainSelected !== '') this.offersStud = this.offersStud.filter(value => value.domain === this.domainSelected);
+        const positionFormValue = this.positionFilter.controls['positionTextFilter'].value.toString().toLowerCase();
+        if (positionFormValue !== '')
+          this.offersStud = this.offersStud.filter(value => value.positionName?.toLowerCase().includes(positionFormValue));
+      },
+      () => {
+        this.offersStud = [];
+      }
+    );
   }
 }
